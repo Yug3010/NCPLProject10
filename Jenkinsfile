@@ -12,7 +12,7 @@ pipeline {
 
   tools {
     terraform 'Terraform-latest'
-    sonarRunner 'sonar-scanner'  
+    // no sonarRunner here
   }
 
   stages {
@@ -25,7 +25,7 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv("${SONARQUBE_ENV}") {
-          sh "${tool 'sonar-scanner'}/bin/sonar-scanner"
+          sh 'sonar-scanner'  // assumes sonar-scanner is on PATH of Jenkins agent
         }
       }
     }
