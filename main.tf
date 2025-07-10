@@ -5,16 +5,20 @@ terraform {
       version = "~> 4.0"
     }
   }
+  required_version = ">= 1.0"
 }
 
 
-provider "azurerm" {
-  features {}
-}
+
 
 variable "subscription_id" {
   description = "Azure subscription ID"
   type        = string
+}
+
+provider "azurerm" {
+  features {}
+  subscription_id = var.subscription_id
 }
 
 resource "azurerm_policy_definition" "custom_policy" {
@@ -26,8 +30,10 @@ resource "azurerm_policy_definition" "custom_policy" {
 
   policy_rule = jsonencode({
     "if": {
-      "field": "[concat('tags[', parameters('tagName'), ']')]",
-      "equals": null
+      "not": {
+        "field": "[concat('tags[', parameters('tagName'), ']')]",
+        "exists": true
+      }
     },
     "then": {
       "effect": "deny"
@@ -45,14 +51,18 @@ resource "azurerm_policy_definition" "custom_policy" {
   })
 }
 
-resource "azurerm_policy_assignment" "tag_policy_assignment" {
-  name                 = "assign-enforce-tag-policy"
-  scope                = "/subscriptions/${var.subscription_id}"
-  policy_definition_id = azurerm_policy_definition.custom_policy.id
 
-  parameters = jsonencode({
-    "tagName": {
-      "value": "environment"
-    }
-  })
+resource "null_resource" "policy_assignment" {
+  depends_on = [azurerm_policy_definition.custom_policy]
+
+    provisioner "local-exec" {
+    command = <<EOT
+      az policy assignment create \
+        --name assign-enforce-tag-policy \
+        --scope /subscriptions/${var.subscription_id} \
+        --policy ${azurerm_policy_definition.custom_policy.id} \
+        --params '{ "tagName": { "value": "environment" } }'
+    EOT
+  }
+
 }
