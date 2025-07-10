@@ -6,13 +6,13 @@ pipeline {
     ARM_CLIENT_ID       = credentials('azure-client-id')
     ARM_CLIENT_SECRET   = credentials('azure-client-secret')
     ARM_TENANT_ID       = credentials('azure-tenant-id')
+    SONAR_TOKEN         = credentials('sonar-token')   
     TF_IN_AUTOMATION    = 'true'
     SONARQUBE_ENV       = 'SonarQubeServer'
   }
 
   tools {
     terraform 'Terraform-latest'
-    // sonar-scanner is not supported in tools block, so removed
   }
 
   stages {
@@ -26,9 +26,10 @@ pipeline {
       steps {
         withSonarQubeEnv("${SONARQUBE_ENV}") {
           sh '''
+            export SONAR_TOKEN=${SONAR_TOKEN}
             export PATH=$PATH:/opt/homebrew/bin
-            sonar-scanner --version
-            sonar-scanner
+            sonar-scanner \
+              -Dsonar.login=$SONAR_TOKEN
           '''
         }
       }
