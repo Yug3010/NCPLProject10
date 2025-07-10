@@ -12,6 +12,7 @@ pipeline {
 
   tools {
     terraform 'Terraform-latest'
+    sonarScanner 'sonar-scanner'
   }
 
   stages {
@@ -24,7 +25,7 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv("${SONARQUBE_ENV}") {
-          sh 'sonar-scanner'
+          sh "${tool 'sonar-scanner'}/bin/sonar-scanner"
         }
       }
     }
