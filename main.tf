@@ -2,6 +2,11 @@ provider "azurerm" {
   features {}
 }
 
+variable "subscription_id" {
+  description = "Azure subscription ID"
+  type        = string
+}
+
 resource "azurerm_policy_definition" "custom_policy" {
   name         = "enforce-tag-policy"
   policy_type  = "Custom"
@@ -32,7 +37,7 @@ resource "azurerm_policy_definition" "custom_policy" {
 
 resource "azurerm_policy_assignment" "tag_policy_assignment" {
   name                 = "assign-enforce-tag-policy"
-  scope                = "/subscriptions/6c0158cc-0a36-4f93-b3bf-20d1ae9bb55b"
+  scope                = "/subscriptions/${var.subscription_id}"
   policy_definition_id = azurerm_policy_definition.custom_policy.id
 
   parameters = jsonencode({
