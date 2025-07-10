@@ -12,7 +12,7 @@ pipeline {
 
   tools {
     terraform 'Terraform-latest'
-    sonar 'sonar-scanner'  
+    sonarRunner 'sonar-scanner'  
   }
 
   stages {
