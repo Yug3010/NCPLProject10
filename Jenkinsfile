@@ -28,8 +28,7 @@ pipeline {
           sh '''
             export SONAR_TOKEN=${SONAR_TOKEN}
             export PATH=$PATH:/opt/homebrew/bin
-            sonar-scanner \
-              -Dsonar.login=$SONAR_TOKEN
+            sonar-scanner -Dsonar.login=$SONAR_TOKEN
           '''
         }
       }
@@ -44,6 +43,14 @@ pipeline {
     stage('Terraform Plan') {
       steps {
         sh 'terraform plan -var="subscription_id=$ARM_SUBSCRIPTION_ID"'
+      }
+    }
+    
+    stage('Terraform Import') {
+      steps {
+        sh '''
+          terraform import azurerm_policy_definition.custom_policy /subscriptions/${ARM_SUBSCRIPTION_ID}/providers/Microsoft.Authorization/policyDefinitions/enforce-tag-policy || true
+        '''
       }
     }
 
