@@ -47,12 +47,13 @@ pipeline {
     }
     
     stage('Terraform Import') {
-      steps {
-        sh '''
-          terraform import azurerm_policy_definition.custom_policy /subscriptions/${ARM_SUBSCRIPTION_ID}/providers/Microsoft.Authorization/policyDefinitions/enforce-tag-policy || true
-        '''
-      }
-    }
+  steps {
+    sh '''
+      terraform import -var="subscription_id=${ARM_SUBSCRIPTION_ID}" azurerm_policy_definition.custom_policy /subscriptions/${ARM_SUBSCRIPTION_ID}/providers/Microsoft.Authorization/policyDefinitions/enforce-tag-policy || true
+    '''
+  }
+}
+
 
     stage('Terraform Apply') {
       steps {
