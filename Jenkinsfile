@@ -36,28 +36,37 @@ pipeline {
 
     stage('Terraform Init') {
       steps {
-        sh 'terraform init'
+        sh '''
+          export PATH=$PATH:/opt/homebrew/bin
+          terraform init
+        '''
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        sh 'terraform plan -var="subscription_id=$ARM_SUBSCRIPTION_ID"'
+        sh '''
+          export PATH=$PATH:/opt/homebrew/bin
+          terraform plan -var="subscription_id=${ARM_SUBSCRIPTION_ID}"
+        '''
       }
     }
     
     stage('Terraform Import') {
-  steps {
-    sh '''
-      terraform import -var="subscription_id=${ARM_SUBSCRIPTION_ID}" azurerm_policy_definition.custom_policy /subscriptions/${ARM_SUBSCRIPTION_ID}/providers/Microsoft.Authorization/policyDefinitions/enforce-tag-policy || true
-    '''
-  }
-}
-
+      steps {
+        sh '''
+          export PATH=$PATH:/opt/homebrew/bin
+          terraform import -var="subscription_id=${ARM_SUBSCRIPTION_ID}" azurerm_policy_definition.custom_policy /subscriptions/${ARM_SUBSCRIPTION_ID}/providers/Microsoft.Authorization/policyDefinitions/enforce-tag-policy || true
+        '''
+      }
+    }
 
     stage('Terraform Apply') {
       steps {
-        sh 'terraform apply -auto-approve -var="subscription_id=$ARM_SUBSCRIPTION_ID"'
+        sh '''
+          export PATH=$PATH:/opt/homebrew/bin
+          terraform apply -auto-approve -var="subscription_id=${ARM_SUBSCRIPTION_ID}"
+        '''
       }
     }
   }
