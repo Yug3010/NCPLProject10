@@ -17,7 +17,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/your-username/azure-policy-project.git'
+        git 'https://github.com/Yug3010/NCPLProject10'
       }
     }
 
