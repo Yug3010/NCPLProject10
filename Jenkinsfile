@@ -15,11 +15,10 @@ pipeline {
   }
 
   stages {
-   stage('Checkout') {
-  steps {
-    git branch: 'main', url: 'https://github.com/Yug3010/NCPLProject10'
-  }
-}
+    stage('Checkout') {
+      steps {
+        git branch: 'main', url: 'https://github.com/Yug3010/NCPLProject10'
+      }
     }
 
     stage('SonarQube Analysis') {
