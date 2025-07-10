@@ -12,7 +12,7 @@ pipeline {
 
   tools {
     terraform 'Terraform-latest'
-    // no sonarRunner here
+    // sonar-scanner is not supported in tools block, so removed
   }
 
   stages {
@@ -25,7 +25,11 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv("${SONARQUBE_ENV}") {
-          sh 'sonar-scanner'  // assumes sonar-scanner is on PATH of Jenkins agent
+          sh '''
+            export PATH=$PATH:/opt/homebrew/bin
+            sonar-scanner --version
+            sonar-scanner
+          '''
         }
       }
     }
