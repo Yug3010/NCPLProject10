@@ -1,0 +1,13 @@
+jenins-token=sqa_62d9752566266f2779594d42e6de57777140c942
+
+
+"clientId": "9242c104-2ab0-47aa-b8e1-6269f2829ad0",
+  "clientSecret": "EtQ8Q~9hLWcJqCc7QWJm5uMar9bHoevsACNPBcRH",
+  "subscriptionId": "6c0158cc-0a36-4f93-b3bf-20d1ae9bb55b",
+  "tenantId": "69659f0e-1473-4f94-bcd4-5bb8b2e0436d",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"

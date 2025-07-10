@@ -1,0 +1,4 @@
+# Ignore tokens or credentials files
+tokens
+*.secret
+.env
